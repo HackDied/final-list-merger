@@ -30,19 +30,6 @@ Uygulama modern bir CustomTkinter arayuzu ile calisir. Dosyalarinizi surekleyip 
 3. `Final_List_Template.xlsx` dosyasinin `Final List Merger Pro.exe` ile ayni klasorde oldugundan emin olun
 4. `Final List Merger Pro.exe` dosyasini calistirin
 
-### Kaynaktan Calistirma
-
-```bash
-# Gerekli kutuphaneler
-pip install customtkinter openpyxl pandas
-
-# Opsiyonel (surukle & birak destegi)
-pip install tkinterdnd2
-
-# Calistir
-python final_list_merger.py
-```
-
 ## Kullanim
 
 1. **Dosya Ekle** — "Dosya Secmek Icin Tikla" butonuna basin veya dosyalari surukleyip birakin
@@ -62,15 +49,6 @@ Uygulama asagidaki yapida Excel dosyalari bekler:
 - **D sutunu** — Miktar
 - **G sutunu** — Birim fiyat
 - TOTAL, DISCOUNT ve GRAND TOTAL satirlari otomatik algilanir
-
-## EXE Olusturma
-
-```bash
-pip install pyinstaller
-pyinstaller final_list_merger.spec
-```
-
-Olusturulan exe `dist/Final List Merger Pro/` klasorunde bulunur. `Final_List_Template.xlsx` dosyasini bu klasore kopylamayi unutmayin.
 
 ## Lisans
 
