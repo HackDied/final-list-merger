@@ -1022,10 +1022,11 @@ class FinalListMerger:
                         break
                     continue
 
-                try:
-                    int(float(first_col_val))
+                # Sıra numarası kontrolü: 1, 2, 3 veya 1A, 1B, 2A gibi
+                val_str = str(first_col_val).strip()
+                if val_str and val_str[0].isdigit():
                     data_rows.append(row.values.tolist())
-                except (ValueError, TypeError):
+                else:
                     continue
 
             return {
