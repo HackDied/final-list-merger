@@ -821,18 +821,21 @@ class FinalListMerger:
             all_total_rows.append(current_row)
             current_row += 1
 
-            disc_pct = info.get('discount_pct', 10)
-            self._apply_total_style(ws, current_row, f'DISC.({disc_pct}%):')
-            ws.cell(current_row, 7).value = f"=G{total_row}*{disc_pct/100}"
-            ws.cell(current_row, 7).number_format = price_format
-            disc_row = current_row
-            all_disc_rows.append(current_row)
-            current_row += 1
+            disc_pct = info.get('discount_pct', 0)
+            if disc_pct:
+                self._apply_total_style(ws, current_row, f'DISC.({disc_pct}%):')
+                ws.cell(current_row, 7).value = f"=G{total_row}*{disc_pct/100}"
+                ws.cell(current_row, 7).number_format = price_format
+                disc_row = current_row
+                all_disc_rows.append(current_row)
+                current_row += 1
 
-            self._apply_total_style(ws, current_row, 'G. TOTAL:')
-            ws.cell(current_row, 7).value = f"=G{total_row}-G{disc_row}"
-            ws.cell(current_row, 7).number_format = price_format
-            all_gtotal_rows.append(current_row)
+                self._apply_total_style(ws, current_row, 'G. TOTAL:')
+                ws.cell(current_row, 7).value = f"=G{total_row}-G{disc_row}"
+                ws.cell(current_row, 7).number_format = price_format
+                all_gtotal_rows.append(current_row)
+            else:
+                all_gtotal_rows.append(total_row)
             last_currency_symbol = currency_symbol
             current_row += 4
 
@@ -900,29 +903,30 @@ class FinalListMerger:
             ws.cell(current_row, 8).border = summary_border
             current_row += 1
 
-            # DISCOUNT
-            disc_refs = '+'.join([f'G{r}' for r in all_disc_rows])
-            ws.merge_cells(start_row=current_row, start_column=4, end_row=current_row, end_column=6)
-            lbl = ws.cell(current_row, 4)
-            lbl.value = 'TOTAL DISCOUNT :'
-            lbl.font = summary_label_font
-            lbl.alignment = Alignment(horizontal='right', vertical='center')
-            lbl.fill = label_fill
-            lbl.border = summary_border
-            for c in range(5, 7):
-                ws.cell(current_row, c).fill = label_fill
-                ws.cell(current_row, c).border = summary_border
-            ws.merge_cells(start_row=current_row, start_column=7, end_row=current_row, end_column=8)
-            val = ws.cell(current_row, 7)
-            val.value = f'={disc_refs}'
-            val.font = summary_value_font
-            val.number_format = summary_format
-            val.alignment = Alignment(horizontal='center', vertical='center')
-            val.fill = value_fill
-            val.border = summary_border
-            ws.cell(current_row, 8).fill = value_fill
-            ws.cell(current_row, 8).border = summary_border
-            current_row += 1
+            # DISCOUNT (sadece indirimli sipariş varsa)
+            if all_disc_rows:
+                disc_refs = '+'.join([f'G{r}' for r in all_disc_rows])
+                ws.merge_cells(start_row=current_row, start_column=4, end_row=current_row, end_column=6)
+                lbl = ws.cell(current_row, 4)
+                lbl.value = 'TOTAL DISCOUNT :'
+                lbl.font = summary_label_font
+                lbl.alignment = Alignment(horizontal='right', vertical='center')
+                lbl.fill = label_fill
+                lbl.border = summary_border
+                for c in range(5, 7):
+                    ws.cell(current_row, c).fill = label_fill
+                    ws.cell(current_row, c).border = summary_border
+                ws.merge_cells(start_row=current_row, start_column=7, end_row=current_row, end_column=8)
+                val = ws.cell(current_row, 7)
+                val.value = f'={disc_refs}'
+                val.font = summary_value_font
+                val.number_format = summary_format
+                val.alignment = Alignment(horizontal='center', vertical='center')
+                val.fill = value_fill
+                val.border = summary_border
+                ws.cell(current_row, 8).fill = value_fill
+                ws.cell(current_row, 8).border = summary_border
+                current_row += 1
 
             # GRAND TOTAL
             gtotal_refs = '+'.join([f'G{r}' for r in all_gtotal_rows])
