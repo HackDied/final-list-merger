@@ -1,0 +1,26 @@
+# Build artifacts
+build/
+dist/
+dist2/
+*.spec.bak
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Settings (user-specific)
+.merger_settings.json
+
+# Output files
+MERGED_FINAL_LIST_*.xlsx
+TEST_*.xlsx
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
